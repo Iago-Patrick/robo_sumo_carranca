@@ -7,6 +7,10 @@
 #define ch7   8 //Canal 7 do rádio instanciado à entrada digital 8
 #define ch8   9 //Canal 8 do rádio instanciado à entrada digital 9
 
+#define arma 10
+#define motor_1 11
+#define motor_2 12
+
 #define LED  13 //LED onboard 
 
  
@@ -42,6 +46,43 @@ ISR(TIMER2_OVF_vect)
     
     
 } //end ISR
+
+if(canal_01 < 1500) 
+{
+  digitalWrite(motor1, HIGH);
+   digitalWrite(motor2, HIGH);
+   else if(canal_01 < 1100) 
+   {
+   digitalWrite(motor1, LOW);
+   digitalWrite(motor2, LOW);
+   
+
+   }
+}
+if(canal_02 < 1500) 
+{
+  digitalWrite(motor1, HIGH);
+   digitalWrite(motor2, LOW);
+   else if(canal_02 < 1100)
+   { 
+   digitalWrite(motor1, LOW);
+   digitalWrite(motor2, HIGH);
+
+}
+}
+if(canal_03 > 1550)
+{
+digitalWrite(arma, HIGH);
+
+else if(canal03 < 110)
+{
+digitalWrite(arma, LOW);    
+
+}
+
+
+}
+
  
 
 
@@ -106,7 +147,7 @@ void read_channels() //Faz a leitura dos 6 primeiros canais do rádio
    
 
 } //end read channels
-
+pulseIn (ch1, HIGH, 25000);
 
 void test_channels() //Testa os canais via serial monitor (comentar esta função e só chamar quando necessário)
 {
