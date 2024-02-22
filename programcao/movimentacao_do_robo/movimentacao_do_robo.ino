@@ -47,7 +47,7 @@ ISR(TIMER2_OVF_vect)
     
 } //end ISR
 
-if(canal_01 < 1500) 
+if(canal_01 > 1500) 
 {
   digitalWrite(motor1, HIGH);
    digitalWrite(motor2, HIGH);
@@ -59,7 +59,7 @@ if(canal_01 < 1500)
 
    }
 }
-if(canal_02 < 1500) 
+if(canal_02 > 1500) 
 {
   digitalWrite(motor1, HIGH);
    digitalWrite(motor2, LOW);
@@ -74,7 +74,7 @@ if(canal_03 > 1550)
 {
 digitalWrite(arma, HIGH);
 
-else if(canal03 < 110)
+else if(canal03 < 1100)
 {
 digitalWrite(arma, LOW);    
 
