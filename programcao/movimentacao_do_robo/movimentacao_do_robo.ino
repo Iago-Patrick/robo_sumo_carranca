@@ -130,24 +130,24 @@ void loop()
     
   if(canal_01 > 1500) //direita 
   { 
-    velocidade=map(canal_01,1500, 1553,0,254);
+    velocidade=map(canal_01,1500, 1900,0,254);
     direita(velocidade);
   }
   else 
-    if(canal_01 < 1100) //esquerda
+    if(canal_01 < 1200) //esquerda
     {
-      velocidade=map(canal_01,1015,1100 ,0,254);
+      velocidade=map(canal_01,1200,1030,0,254);
       esquerda(velocidade);
     }
   if(canal_02 > 1500) //cima
   {  
-    velocidade=map(canal_02,1500, 1553,0,254);
+    velocidade=map(canal_02,1500, 1900,0,254);
     frente(velocidade);
   }
   else 
-    if(canal_02 < 1100) //baixo
+    if(canal_02 < 1200) //baixo
     {
-      velocidade=map(canal_02,1500, 1553,0,254);
+      velocidade=map(canal_02,1200, 1030,0,254);
       tras(velocidade);
     }
 
