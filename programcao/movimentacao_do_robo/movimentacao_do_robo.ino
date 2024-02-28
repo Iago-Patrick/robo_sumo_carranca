@@ -33,6 +33,7 @@ void setup()
   pinMode(MOTOR2_B,     OUTPUT);
   pinMode(MOTOR_AR_A,   OUTPUT);
   pinMode(MOTOR_AR_B,   OUTPUT);
+ Serial.begin(9600);
 
   // DEIXANDO OS MOTORES PARADOS
  /*digitalWrite(dirFrente, LOW);
@@ -93,29 +94,34 @@ void test_channels();      //Testa os 8 canais do Turnigy9x
 void loop()
 {
     read_channels(); //Lê os 8 primeiros canais do rádio
+    test_channels();
    
    
-  if(canal_01 > 1450 && canal_02 < 1300 ) //direita 
+  if(canal_01 > 1500 ) //direita 
   { 
-    velocidade=map(canal_01,1450, 1600,0,254);
+    velocidade=map(canal_01,1500, 1990,0,254);
     direita(velocidade);
+    velocidade=0;
   }
   else 
-    if(canal_01 < 1200) //esquerda
+    if(canal_01 < 1500) //esquerda
     {
-      velocidade=map(canal_01,1200,1030,0,254);
+      velocidade=map(canal_01,1500,1040,0,254);
       esquerda(velocidade);
+      velocidade=0;
     }
-  if(canal_02 > 1500 && canal_01 > 1500) //cima
+  if(canal_02 > 1500) //cima
   {  
-    velocidade=map(canal_02,1500, 2200,0,254);
+    velocidade=map(canal_02,1500, 1990,0,254);
     frente(velocidade);
+    velocidade=0;
   }
   else 
-    if(canal_02 < 1300 && canal_01 < 1300 ) //baixo
+    if(canal_02 < 1500  ) //baixo
     {
-      velocidade=map(canal_02,100, 830,0,254);
+      velocidade=map(canal_02,1500, 1000,0,254);
       tras(velocidade);
+      velocidade=0;
     }
 
   //arma
@@ -168,5 +174,6 @@ void test_channels() //Testa os canais via serial monitor (comentar esta funçã
 
       Serial.println("");
       Serial.println("");
+      delay(1000);
       
 }
