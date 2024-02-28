@@ -5,129 +5,96 @@
 #define LED  13 //LED onboard 
 //entradas dos motores 11, 10 , 9, 8
 // PORTAS DA PONTE H
-#define dirFrente 10
-#define dirTras  11
-#define esqFrente 9
-#define esqTras   8
-#define armFrente 11
-#define armTras   10
+#define MOTOR1_A    8
+#define MOTOR1_B    10
+#define MOTOR2_A    9
+#define MOTOR2_B    11
+#define MOTOR_AR_A  0
+#define MOTOR_AR_B   0
 #define velocidadeG 110
 
 int velocidade =0;
+
+int canal_01 = 0;
+int canal_02 = 0;
+int canal_03 = 0;
+
+void setup()
+{ 
+
+  // -- Direção dos I/Os --
+  pinMode(ch1, INPUT); //Entrada para o canal 1 do rádio
+  pinMode(ch2, INPUT); //Entrada para o canal 2 do rádio
+  pinMode(ch3, INPUT); //Entrada para o canal 3 do rádio
+  // CONFIGURAÇÃO DOS PINOS DA PONTE-H
+  pinMode(MOTOR1_A,     OUTPUT);
+  pinMode(MOTOR1_B,     OUTPUT);
+  pinMode(MOTOR2_A,     OUTPUT);
+  pinMode(MOTOR2_B,     OUTPUT);
+  pinMode(MOTOR_AR_A,   OUTPUT);
+  pinMode(MOTOR_AR_B,   OUTPUT);
+
+  // DEIXANDO OS MOTORES PARADOS
+ /*digitalWrite(dirFrente, LOW);
+  digitalWrite(dirTras,   LOW);
+  digitalWrite(esqFrente, LOW);
+  digitalWrite(esqTras,   LOW);*/
+   
+} //end setup
 
 
 
 void frente(int velocidade)
 {
     // MOTOR DIREITO PARA FRENTE
-    analogWrite(dirFrente, LOW );
-    analogWrite(esqTras,  velocidade );
+    digitalWrite(MOTOR1_A, LOW );
+    analogWrite(MOTOR1_B,  velocidade );
 
     // MOTOR ESQUERDO PARA TRAS
-    analogWrite(dirTras, LOW );
-    analogWrite(esqFrente ,  velocidade );
+    digitalWrite(MOTOR2_A, LOW );
+    analogWrite(MOTOR2_B ,  velocidade );
 }
 void tras (int velocidade)
 {
     // MOTOR DIREITO PARA TRAS
-    analogWrite(dirTras,  LOW); // 11
-    analogWrite(esqFrente ,    velocidade); // 9
+    analogWrite(MOTOR1_A,  velocidade); // 11
+    digitalWrite(MOTOR2_B ,    LOW); // 9
 
     // MOTOR ESQUERDO PARA TRAS
-    analogWrite(dirFrente ,  LOW); // 10
-    analogWrite(esqTras ,    velocidade);// 8 
+    analogWrite(MOTOR2_A ,  velocidade); // 10
+    digitalWrite(MOTOR2_B ,    LOW);// 8 
 }
 
 void direita(int velocidade)
 {
     // MOTOR DIREITO PARA TRAS
-    analogWrite(dirFrente,  LOW);
-    analogWrite(dirTras,    velocidade);
+    analogWrite(MOTOR1_A,  velocidade);
+    digitalWrite(MOTOR1_B,   LOW);
 
     // MOTOR ESQUERDO PARA FRENTE
-    analogWrite(esqFrente,  velocidade);
-    analogWrite(esqTras,    LOW);
+    digitalWrite(MOTOR2_A,     LOW);
+    digitalWrite(MOTOR2_B,    LOW);
 }
 void esquerda(int velocidade)
 {
     // MOTOR DIREITO PARA FRENTE
-    analogWrite(dirFrente,  velocidade);
-    analogWrite(dirTras,    LOW);
+    digitalWrite(MOTOR1_A,  LOW);
+    digitalWrite(MOTOR1_B,    LOW);
 
     // MOTOR ESQUERDO PARA TRAS
-    analogWrite(esqFrente,  LOW);
-    analogWrite(esqTras,    velocidade);
+    analogWrite(MOTOR2_A,  velocidade);
+    digitalWrite(MOTOR2_B,    LOW);
 }
  
 // --- Protótipo das funções auxiliares ---
 void read_channels();      //Função para leitura das entradas dos canais
 void test_channels();      //Testa os 8 canais do Turnigy9x
 
- 
-// --- Declaração de variáveis globais ---
-
-//variáveis para os canais do rádio
-int canal_01 = 0, 
-    canal_02 = 0, 
-    canal_03 = 0;
-    
-// --- Rotina de Interrupção ---
-ISR(TIMER2_OVF_vect)
-{
-    TCNT2=100;          // Reinicializa o registrador do Timer2
-       
-    
-    if(canal_03 < 1500) digitalWrite(LED, HIGH); //Acende LED se o pulso do canal 3 for menor que 1500µs
-    
-    else digitalWrite(LED, LOW);                 //Senão, mantém LED apagado
-    
-    
-} //end ISR
-
-// --- Configurações iniciais ---
-void setup()
-{ 
-     
-  // -- Direção dos I/Os --
-  pinMode(ch1, INPUT); //Entrada para o canal 1 do rádio
-  pinMode(ch2, INPUT); //Entrada para o canal 2 do rádio
-  pinMode(ch3, INPUT); //Entrada para o canal 3 do rádio
-
-  pinMode(LED, OUTPUT); //saída para o LED onboard
-  
-  digitalWrite(LED, LOW); //LED inicia desligado
-  
-     
-  Serial.begin(9600);            //Inicia comunicação Serial com 9600 de baud rate
-  
-  // -- Registradores de configuração do Timer2 --
-     TCCR2A = 0x00;   //Timer operando em modo normal
-     TCCR2B = 0x07;   //Prescaler 1:1024
-     TCNT2  = 100;    //10 ms overflow again
-     TIMSK2 = 0x01;   //Habilita interrupção do Timer2
-  
-
-  // CONFIGURAÇÃO DOS PINOS DA PONTE-H
-  pinMode(dirFrente, OUTPUT);
-  pinMode(dirTras,   OUTPUT);
-  pinMode(esqFrente, OUTPUT);
-  pinMode(esqTras,   OUTPUT);
-
-  // DEIXANDO OS MOTORES PARADOS
-  digitalWrite(dirFrente, LOW);
-  digitalWrite(dirTras,   LOW);
-  digitalWrite(esqFrente, LOW);
-  digitalWrite(esqTras,   LOW);
-   
-} //end setup
-
-//Loop infinito
 void loop()
 {
     read_channels(); //Lê os 8 primeiros canais do rádio
    
-    test_channels(); //Testa os canais e envia informação para o Serial Monitor
-    
+   
   if(canal_01 > 1450 && canal_02 < 1300 ) //direita 
   { 
     velocidade=map(canal_01,1450, 1600,0,254);
@@ -154,20 +121,20 @@ void loop()
   //arma
   if(canal_03 > 1550)
   {
-    analogWrite(armFrente,  velocidadeG);
-    analogWrite(armTras,    LOW);
+    analogWrite(MOTOR_AR_A,  velocidadeG);
+    analogWrite(MOTOR_AR_B,    LOW);
 
-    analogWrite(armFrente,  velocidadeG);
-    analogWrite(armTras,    LOW);
+    analogWrite(MOTOR_AR_A,  velocidadeG);
+    analogWrite(MOTOR_AR_B,    LOW);
   }
   else 
     if(canal_03 < 1100)
     {
-      analogWrite(armTras,  velocidadeG);
-      analogWrite(armFrente,    LOW);
+      analogWrite(MOTOR_AR_A,  velocidadeG);
+      analogWrite(MOTOR_AR_B,    LOW);
 
-      analogWrite(armTras,  velocidadeG);
-      analogWrite(armFrente,    LOW);
+      analogWrite(MOTOR_AR_A,  velocidadeG);
+      analogWrite(MOTOR_AR_B,    LOW);
     }  
 }//end loop
 
