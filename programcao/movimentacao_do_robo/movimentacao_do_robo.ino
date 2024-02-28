@@ -20,22 +20,22 @@ int velocidade =0;
 void frente(int velocidade)
 {
     // MOTOR DIREITO PARA FRENTE
-    analogWrite(dirFrente,  velocidade);
-    analogWrite(dirTras,    LOW);
+    analogWrite(dirFrente, LOW );
+    analogWrite(esqTras,  velocidade );
 
-    // MOTOR ESQUERDO PARA FRENTE
-    analogWrite(esqFrente,  velocidade);
-    analogWrite(esqTras,    LOW);
+    // MOTOR ESQUERDO PARA TRAS
+    analogWrite(dirTras, LOW );
+    analogWrite(esqFrente ,  velocidade );
 }
 void tras (int velocidade)
 {
     // MOTOR DIREITO PARA TRAS
-    analogWrite(dirFrente,  LOW);
-    analogWrite(dirTras,    velocidade);
+    analogWrite(dirTras,  LOW); // 11
+    analogWrite(esqFrente ,    velocidade); // 9
 
     // MOTOR ESQUERDO PARA TRAS
-    analogWrite(esqFrente,  LOW);
-    analogWrite(esqTras,    velocidade);
+    analogWrite(dirFrente ,  LOW); // 10
+    analogWrite(esqTras ,    velocidade);// 8 
 }
 
 void direita(int velocidade)
@@ -128,9 +128,9 @@ void loop()
    
     test_channels(); //Testa os canais e envia informação para o Serial Monitor
     
-  if(canal_01 > 1500) //direita 
+  if(canal_01 > 1450 && canal_02 < 1300 ) //direita 
   { 
-    velocidade=map(canal_01,1500, 1900,0,254);
+    velocidade=map(canal_01,1450, 1600,0,254);
     direita(velocidade);
   }
   else 
@@ -139,15 +139,15 @@ void loop()
       velocidade=map(canal_01,1200,1030,0,254);
       esquerda(velocidade);
     }
-  if(canal_02 > 1500) //cima
+  if(canal_02 > 1500 && canal_01 > 1500) //cima
   {  
-    velocidade=map(canal_02,1500, 1900,0,254);
+    velocidade=map(canal_02,1500, 2200,0,254);
     frente(velocidade);
   }
   else 
-    if(canal_02 < 1200) //baixo
+    if(canal_02 < 1300 && canal_01 < 1300 ) //baixo
     {
-      velocidade=map(canal_02,1200, 1030,0,254);
+      velocidade=map(canal_02,100, 830,0,254);
       tras(velocidade);
     }
 
@@ -201,4 +201,5 @@ void test_channels() //Testa os canais via serial monitor (comentar esta funçã
 
       Serial.println("");
       Serial.println("");
+      
 }
