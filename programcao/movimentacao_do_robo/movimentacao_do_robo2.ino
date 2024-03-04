@@ -6,9 +6,9 @@
 //entradas dos motores 11, 10 , 9, 8
 // PORTAS DA PONTE H
 #define MOTOR1_A    8
-#define MOTOR1_B    10
+#define MOTOR1_B    10//p
 #define MOTOR2_A    9
-#define MOTOR2_B    11
+#define MOTOR2_B    11//p
 #define MOTOR_AR_A  0
 #define MOTOR_AR_B   0
 #define velocidadeG 110
@@ -58,33 +58,33 @@ void frente(int velocidade)
 void tras (int velocidade)
 {
     // MOTOR DIREITO PARA TRAS
-    analogWrite(MOTOR1_A,  velocidade); // 11
-    digitalWrite(MOTOR2_B ,    LOW); // 9
+    analogWrite(MOTOR1_B,  velocidade); // 11
+    digitalWrite(MOTOR2_A ,    LOW); // 9
 
     // MOTOR ESQUERDO PARA TRAS
-    analogWrite(MOTOR2_A ,  velocidade); // 10
-    digitalWrite(MOTOR2_B ,    LOW);// 8 
+    analogWrite(MOTOR2_B ,  velocidade); // 10
+    digitalWrite(MOTOR2_A ,    LOW);// 8 
 }
 
 void direita(int velocidade)
 {
     // MOTOR DIREITO PARA TRAS
-    analogWrite(MOTOR1_A,  velocidade);
-    digitalWrite(MOTOR1_B,   LOW);
+    analogWrite(MOTOR1_B,  velocidade);
+    digitalWrite(MOTOR1_A,   LOW);
 
     // MOTOR ESQUERDO PARA FRENTE
     digitalWrite(MOTOR2_A,     LOW);
-    digitalWrite(MOTOR2_B,    LOW);
+    digitalWrite(MOTOR2_B,  velocidade  );
 }
 void esquerda(int velocidade)
 {
     // MOTOR DIREITO PARA FRENTE
     digitalWrite(MOTOR1_A,  LOW);
-    digitalWrite(MOTOR1_B,    LOW);
+    digitalWrite(MOTOR1_B,    velocidade);
 
     // MOTOR ESQUERDO PARA TRAS
-    analogWrite(MOTOR2_A,  velocidade);
-    digitalWrite(MOTOR2_B,    LOW);
+    analogWrite(MOTOR2_A,  LOW);
+    digitalWrite(MOTOR2_B,    velocidade);
 }
  
 // --- Protótipo das funções auxiliares ---
