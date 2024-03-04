@@ -109,14 +109,14 @@ void loop()
     test_channels();
    
    
-  if(canal_01 > 1500 ) //direita 
+  if(canal_01 > 1500 && canal_02 < 1500) //direita 
   { 
      velocidade2=map(canal_01,1500, 1990,0,254);
       velocidade1=map(canal_02,1000, 1990,-254,254);
   direita(velocidade1, velocidade2);
   }
   else 
-    if(canal_01 < 1500) //esquerda
+    if(canal_01 < 1500 && canal_02 > 1500) //esquerda
     {
       velocidade1=map(canal_01,1500, 1990,0,254);
       velocidade2=map(canal_02,1000, 1990,-254,254);
@@ -124,14 +124,14 @@ void loop()
       esquerda(velocidade1, velocidade2);
       
     }
-  if(canal_02 > 1500) //cima
+  if(canal_02 > 1500 && canal_01 > 1500) //cima
   {  
     velocidade1=map(canal_01,1500, 1990,0,254);
     velocidade2=map(canal_02,1500, 1990,0,254);
     frente(velocidade1, velocidade2 );
   }
   else 
-    if(canal_02 < 1500  ) //baixo
+    if(canal_02 < 1500 && canal_01 < 1500  ) //baixo
     {
       velocidade1=map(canal_01,1000, 1990,-254,254);
       velocidade2=map(canal_02,1000, 1990,-254,254);
