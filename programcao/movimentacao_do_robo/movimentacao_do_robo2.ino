@@ -11,7 +11,6 @@
 #define MOTOR2_B    11//p
 #define MOTOR_AR_A  0
 #define MOTOR_AR_B   0
-#define velocidadeG 110
 
 int velocidade1 =0;
 int velocidade2 =0;
@@ -57,7 +56,7 @@ void frente(int velocidade1, int velocidade2 )
     digitalWrite(MOTOR2_A, HIGH );
     analogWrite(MOTOR2_B ,  velocidade2 );
 }
-void tras (int velocidade, int velocidade2)
+void tras (int velocidade1, int velocidade2)
 {
     // MOTOR DIREITO PARA TRAS
     analogWrite(MOTOR1_B,  velocidade1); // 11
@@ -88,12 +87,12 @@ void esquerda(int velocidade1, int velocidade2)
     digitalWrite(MOTOR2_A,  HIGH);
     analogWrite(MOTOR2_B,    velocidade2);
 }
-void  arma_frente (int velociade3)
+void  arma_frente (int velocidade3)
 {
   digitalWrite (MOTOR_AR_A, HIGH);
   analogWrite(MOTOR_AR_B, velocidade3 )
 }
-void arma_tras (int velociade3)
+void arma_tras (int velocidade3)
 {
   digitalWrite (MOTOR_AR_A, LOW);
   analogWrite(MOTOR_AR_B, velocidade3 )
@@ -112,47 +111,46 @@ void loop()
    
   if(canal_01 > 1500 ) //direita 
   { 
-    velocidade1=map(canal_01,1500, 1990,0,254);
-    velocidade2=map(canal_02,1500, 1990,0,254);
-  direita(int velocidade1, int velocidade2);
+     velocidade2=map(canal_01,1500, 1990,0,254);
+      velocidade1=map(canal_02,1000, 1990,-254,254);
+  direita(velocidade1, velocidade2);
   }
   else 
     if(canal_01 < 1500) //esquerda
     {
-      velocidade1=map(canal_02,1500, 1990,0,254);
-      velocidade2=map(canal_02,1500, 1990,0,254);
+      velocidade1=map(canal_01,1500, 1990,0,254);
+      velocidade2=map(canal_02,1000, 1990,-254,254);
 
-      esquerda(int velocidade1, int velocidade2);
+      esquerda(velocidade1, velocidade2);
       
     }
   if(canal_02 > 1500) //cima
   {  
     velocidade1=map(canal_01,1500, 1990,0,254);
     velocidade2=map(canal_02,1500, 1990,0,254);
-    frente(int velocidade1, int velocidade2 );
+    frente(velocidade1, velocidade2 );
   }
   else 
     if(canal_02 < 1500  ) //baixo
     {
-      velocidade1=map(canal_02,1000, 1990,-254,254);
+      velocidade1=map(canal_01,1000, 1990,-254,254);
       velocidade2=map(canal_02,1000, 1990,-254,254);
-      tras (int velocidade, int velocidade2);
+       tras(velocidade1, velocidade2);
     }
 
   //arma
   if(canal_03 > 1500)
   {
-    velocidade3=map(1500, 1990, 0, 254);
-    arma_frente (int velociade3);
+    velocidade3=map(canal_03,1500, 1990, 0, 254);
+    arma_frente ( velocidade3);
   }
   else 
     if(canal_03 < 1300)
     {
-      velocidade3=map(1000,1300 , -254, 0);
-      arma_tras (int velociade3);
+      velocidade3=map(canal_03,1000,1300 , -254, 0);
+      arma_tras ( velocidade3);
     }  
 }//end loop
-
 //Funções auxiliares
 void read_channels() //Faz a leitura dos 6 primeiros canais do rádio
 {
