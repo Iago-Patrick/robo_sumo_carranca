@@ -1,3 +1,4 @@
+
 #define ch1   6 //Canal 1 do rádio instanciado à entrada digital 2
 #define ch2   5 //Canal 2 do rádio instanciado à entrada digital 3
 #define ch3   3 //Canal 3 do rádio instanciado à entrada digital 4
@@ -49,18 +50,18 @@ void setup()
 void frente(int velocidade1, int velocidade2 )
 {
     // MOTOR DIREITO PARA FRENTE
-    digitalWrite(MOTOR1_A, HIGH );
-    analogWrite(MOTOR1_B,  velocidade1 );
+    digitalWrite(MOTOR1_A, velocidade1 );
+    analogWrite(MOTOR1_B,  HIGH );
 
     // MOTOR ESQUERDO PARA TRAS
-    digitalWrite(MOTOR2_A, HIGH );
-    analogWrite(MOTOR2_B ,  velocidade2 );
+    digitalWrite(MOTOR2_A, velocidade2 );
+    analogWrite(MOTOR2_B ,  LOW );
 }
 void tras (int velocidade1, int velocidade2)
 {
     // MOTOR DIREITO PARA TRAS
-    analogWrite(MOTOR1_B,  velocidade1); // 11
-    digitalWrite(MOTOR1_A ,    LOW); // 9
+    analogWrite(MOTOR1_B,velocidade1 ); // 11
+    digitalWrite(MOTOR1_A , LOW  ); // 9
 
     // MOTOR ESQUERDO PARA TRAS
     analogWrite(MOTOR2_B ,  velocidade2); // 10
@@ -70,12 +71,12 @@ void tras (int velocidade1, int velocidade2)
 void direita(int velocidade1, int velocidade2)
 {
     // MOTOR DIREITO PARA TRAS
-    analogWrite(MOTOR1_B,  velocidade1);
-    digitalWrite(MOTOR1_A,   HIGH);
+    analogWrite(MOTOR1_B,  HIGH);
+    digitalWrite(MOTOR1_A,  velocidade1) ;
 
     // MOTOR ESQUERDO PARA FRENTE
-    digitalWrite(MOTOR2_A,     LOW);
-    analogWrite(MOTOR2_B,  velocidade2  );
+    digitalWrite(MOTOR2_A,    LOW );
+    analogWrite(MOTOR2_B, velocidade2   );
 }
 void esquerda(int velocidade1, int velocidade2)
 {
@@ -84,18 +85,18 @@ void esquerda(int velocidade1, int velocidade2)
     analogWrite(MOTOR1_B,    velocidade1);
 
     // MOTOR ESQUERDO PARA TRAS
-    digitalWrite(MOTOR2_A,  HIGH);
-    analogWrite(MOTOR2_B,    velocidade2);
+    digitalWrite(MOTOR2_A,  velocidade2);
+    analogWrite(MOTOR2_B,    HIGH);
 }
 void  arma_frente (int velocidade3)
 {
   digitalWrite (MOTOR_AR_A, HIGH);
-  analogWrite(MOTOR_AR_B, velocidade3 )
+  analogWrite(MOTOR_AR_B, velocidade3 );
 }
 void arma_tras (int velocidade3)
 {
   digitalWrite (MOTOR_AR_A, LOW);
-  analogWrite(MOTOR_AR_B, velocidade3 )
+  analogWrite(MOTOR_AR_B, velocidade3 );
 }
 
  
@@ -109,29 +110,29 @@ void loop()
     test_channels();
    
    
-  if(canal_01 > 1500 && canal_02 < 1500) //direita 
+  if(canal_01 > 1550 ) //direita 
   { 
-     velocidade2=map(canal_01,1500, 1990,0,254);
+     velocidade2=map(canal_01,1000, 1990,-254,254);
       velocidade1=map(canal_02,1000, 1990,-254,254);
   direita(velocidade1, velocidade2);
   }
   else 
-    if(canal_01 < 1500 && canal_02 > 1500) //esquerda
+    if(canal_01 < 1380 ) //esquerda
     {
-      velocidade1=map(canal_01,1500, 1990,0,254);
+      velocidade1=map(canal_01,1000, 1990,-254,254);
       velocidade2=map(canal_02,1000, 1990,-254,254);
 
       esquerda(velocidade1, velocidade2);
       
     }
-  if(canal_02 > 1500 && canal_01 > 1500) //cima
+  if(canal_02 > 1550 ) //cima
   {  
-    velocidade1=map(canal_01,1500, 1990,0,254);
-    velocidade2=map(canal_02,1500, 1990,0,254);
+    velocidade1=map(canal_01,1000, 1990,-254,254);
+    velocidade2=map(canal_02,1000, 1990,-254,254);
     frente(velocidade1, velocidade2 );
   }
   else 
-    if(canal_02 < 1500 && canal_01 < 1500  ) //baixo
+    if(canal_02 < 1380 ) //baixo
     {
       velocidade1=map(canal_01,1000, 1990,-254,254);
       velocidade2=map(canal_02,1000, 1990,-254,254);
