@@ -1,4 +1,3 @@
-
 #define ch1   6 //Canal 1 do rádio instanciado à entrada digital 2
 #define ch2   5 //Canal 2 do rádio instanciado à entrada digital 3
 #define ch3   3 //Canal 3 do rádio instanciado à entrada digital 4
@@ -6,12 +5,12 @@
 #define LED  13 //LED onboard 
 //entradas dos motores 11, 10 , 9, 8
 // PORTAS DA PONTE H
-#define MOTOR1_A    8
-#define MOTOR1_B    10//p
-#define MOTOR2_A    9
-#define MOTOR2_B    11//p
-#define MOTOR_AR_A  0
-#define MOTOR_AR_B   0
+#define MOTOR1_A    11
+#define MOTOR1_B    4//p
+#define MOTOR2_A    12
+#define MOTOR2_B    2//p
+#define MOTOR_AR_A  9
+#define MOTOR_AR_B   10
 
 int velocidade1 =0;
 int velocidade2 =0;
@@ -46,12 +45,22 @@ void setup()
 } //end setup
 
 
-
 void frente(int velocidade1, int velocidade2 )
 {
     // MOTOR DIREITO PARA FRENTE
     digitalWrite(MOTOR1_A, velocidade1 );
     analogWrite(MOTOR1_B,  HIGH );
+
+    // MOTOR ESQUERDO PARA TRAS
+    digitalWrite(MOTOR2_A, velocidade2 );
+    analogWrite(MOTOR2_B ,  HIGH);
+} 
+
+void parado(int velocidade1, int velocidade2 )
+{
+    // MOTOR DIREITO PARA FRENTE
+    digitalWrite(MOTOR1_A, velocidade1 );
+    analogWrite(MOTOR1_B,  LOW );
 
     // MOTOR ESQUERDO PARA TRAS
     digitalWrite(MOTOR2_A, velocidade2 );
@@ -107,10 +116,10 @@ void test_channels();      //Testa os 8 canais do Turnigy9x
 void loop()
 {
     read_channels(); //Lê os 8 primeiros canais do rádio
-    test_channels();
+    //test_channels();
    
    
-  if(canal_01 > 1550 ) //direita 
+  if(canal_01 > 1600 ) //direita 
   { 
      velocidade2=map(canal_01,1000, 1990,-254,254);
       velocidade1=map(canal_02,1000, 1990,-254,254);
@@ -125,7 +134,7 @@ void loop()
       esquerda(velocidade1, velocidade2);
       
     }
-  if(canal_02 > 1550 ) //cima
+  if(canal_02 > 1600 ) //cima
   {  
     velocidade1=map(canal_01,1000, 1990,-254,254);
     velocidade2=map(canal_02,1000, 1990,-254,254);
@@ -151,6 +160,15 @@ void loop()
       velocidade3=map(canal_03,1000,1300 , -254, 0);
       arma_tras ( velocidade3);
     }  
+    else 
+    if (canal_02 > 1379 && canal_02 < 1599 || canal_01 > 1379 && canal_01 < 1599 )
+    {
+       velocidade1=map(canal_01,1000, 1990,-254,254);
+    velocidade2=map(canal_02,1000, 1990,-254,254);
+     parado(velocidade1,  velocidade2 );
+
+    }
+
 }//end loop
 //Funções auxiliares
 void read_channels() //Faz a leitura dos 6 primeiros canais do rádio
