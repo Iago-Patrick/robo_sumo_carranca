@@ -1,16 +1,16 @@
-#define ch1   6 //Canal 1 do rádio instanciado à entrada digital 2
-#define ch2   5 //Canal 2 do rádio instanciado à entrada digital 3
-#define ch3   3 //Canal 3 do rádio instanciado à entrada digital 4
+#define ch1   5 //Canal 1 do rádio instanciado à entrada digital 5
+#define ch2   6 //Canal 2 do rádio instanciado à entrada digital 6
+#define ch3   3 //Canal 3 do rádio instanciado à entrada digital 3
 
 #define LED  13 //LED onboard 
-//entradas dos motores 11, 10 , 9, 8
+//entradas dos motores 11, 12 , 4, 2
 // PORTAS DA PONTE H
-#define MOTOR1_A    8
-#define MOTOR1_B    10
-#define MOTOR2_A    9
-#define MOTOR2_B    11
-#define MOTOR_AR_A  0
-#define MOTOR_AR_B   0
+#define MOTOR1_A    11
+#define MOTOR1_B    4
+#define MOTOR2_A    12
+#define MOTOR2_B    2
+#define MOTOR_AR_A  9
+#define MOTOR_AR_B   10
 #define velocidadeG 110
 
 int velocidadeC1 =0;
@@ -42,8 +42,8 @@ void movimento_cima(int velocidadec1, int velocidadeC2)
 void movimento_dir (int velocidadec1, int velocidadeC2)
 {
     // MOTOR DIREITO PARA FRENTE
-    analogWrite(MOTOR1_A,  LOW); // 11
-    digitalWrite(MOTOR2_B ,    velocidadeC1); // 9
+    digitalWrite(MOTOR1_A,  LOW); // 11
+    analogWrite(MOTOR2_B ,    velocidadeC1); // 9
 
     // MOTOR ESQUERDO PARA TRAS
     analogWrite(MOTOR2_A ,  velocidadeC2); // 10
@@ -52,8 +52,8 @@ void movimento_dir (int velocidadec1, int velocidadeC2)
 void movimento_esq(int velocidadec1, int velocidadeC2)
 {
     // MOTOR DIREITO PARA FRENTE
-    digitalWrite(MOTOR1_A, velocidadeC1 );
-    analogWrite(MOTOR1_B,  LOW );
+    analogWrite(MOTOR1_A, velocidadeC1 );
+    digitalWrite(MOTOR1_B,  LOW );
 
     // MOTOR ESQUERDO PARA FRENTE
     digitalWrite(MOTOR2_A, LOW );
@@ -68,6 +68,17 @@ void movimento_tras (int velocidadec1, int velocidadeC2)
     // MOTOR ESQUERDO PARA TRAS
     analogWrite(MOTOR2_A ,  velocidadeC2); // 10
     digitalWrite(MOTOR2_B ,    LOW);// 8 
+}
+void movimento_parado()
+{
+  // MOTOR DIREITO PARA TRAS
+    digitalWrite(MOTOR1_A,  HIGH); // 11
+    digitalWrite(MOTOR2_B ,    HIGH); // 9
+
+    // MOTOR ESQUERDO PARA TRAS
+    digitalWrite(MOTOR2_A ,  HIGH); // 10
+    digitalWrite(MOTOR2_B ,   HIGH);// 8 
+
 }
 
 /*----------------------------SETUP----------------------------------*/
@@ -96,9 +107,9 @@ void setup()
 void loop()
 {
   read_channels(); //Lê os 8 primeiros canais do rádio
-  test_channels();
+  //test_channels();
 
-  if(canal_01 > 1500  && canal_02 > 1500) //frente
+  if(canal_01 > 1560  && canal_02 > 1560) //frente
   { 
     velocidadeC1=0;
     velocidadeC2=0;
@@ -108,7 +119,7 @@ void loop()
   }
   else
   {
-    if(canal_01 < 1500 && canal_02 < 1500) //tras 
+    if(canal_01 < 1560 && canal_02 < 1560) //tras 
     {
       velocidadeC1=0;
       velocidadeC2=0;
@@ -118,7 +129,7 @@ void loop()
     }
     else
     {
-      if(canal_01 > 1500 && canal_02 < 1500)
+      if(canal_01 > 1560 && canal_02 < 1560)
       {
         velocidadeC1=0;
         velocidadeC2=0;
@@ -128,7 +139,8 @@ void loop()
 
       }
       else
-        if(canal_01 < 1500 && canal_02 > 1500)
+      {
+        if(canal_01 < 1560 && canal_02 > 1560)
         {
           velocidadeC1=0;
           velocidadeC2=0;
@@ -136,6 +148,8 @@ void loop()
           velocidadeC2=map(canal_02,980, 1990,0,254);
           movimento_dir( velocidadeC1,  velocidadeC2);
         }
+
+      }
     }
   }
 
